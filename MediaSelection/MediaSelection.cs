@@ -19,6 +19,7 @@ namespace MovieSearch.MediaSelection
         public List<Movie> Movies { get; set; }
         public List<Show> Shows { get; set; }
         public List<Video> Videos { get; set; }
+        public List<MediaLibary> Libaries { get; set; }
 
 
 
@@ -46,8 +47,34 @@ namespace MovieSearch.MediaSelection
                 else if (choice == 1)
                 {
                     loadMedia();
-                    
+                    Console.WriteLine();
+                    Console.WriteLine("What Title would you like to search?");
+                    var titleSearch = Console.ReadLine();
+                    List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
 
+                    //List<Movie> movies = Movies.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+                    //List<Show> shows = Shows.Where(x => x.Title.Contains(titleSearch,StringComparison.OrdinalIgnoreCase)).ToList();
+                    //List<Video> videos = Videos.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    //List<MediaLibary> results = new List<MediaLibary>();
+                    //List<MediaLibary> results
+                    //results.AddRange(movies);
+                    //results.AddRange(shows);
+                    //results.AddRange(videos);
+
+                    var count = results.Count();
+                    var mcount = results.Where(x => x.GetType().Name == "Movie").Count();
+                    Console.WriteLine();
+                    Console.WriteLine($"there are {mcount} Movies ");
+                    Console.WriteLine($"There are {count} references that match your selection.");
+
+                    Console.WriteLine();
+                    foreach (var media in results)
+                    {
+                         
+                        Console.WriteLine($"Your {media.GetType().Name}: {media.Title} ");
+                        media.Display();
+                    }
                 }
                 else if (choice == 2)
                 {
@@ -150,13 +177,13 @@ namespace MovieSearch.MediaSelection
             string file = "movies.csv";
             StreamReader sr = new StreamReader(file);
             sr.ReadLine();
-            Movies = new List<Movie>();
+            Libaries = new List<MediaLibary>();
 
             while (!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
                 string[] movieDetails = line.Split(',');
-                Movies.Add(new Movie()
+                Libaries.Add(new Movie()
                 {
                     Id = (int)ulong.Parse(movieDetails[0]),
                     Title = movieDetails[1],
@@ -169,12 +196,12 @@ namespace MovieSearch.MediaSelection
             string file2 = "shows.csv";
             StreamReader sr2 = new StreamReader(file2);
             sr2.ReadLine();
-            Shows = new List<Show>();
+           // Libaries = new List<MediaLibary>();
             while (!sr2.EndOfStream)
             {
                 string line = sr2.ReadLine();
                 string[] showDetails = line.Split(',');
-                Shows.Add(new Show()
+                Libaries.Add(new Show()
                 {
                     Id = (int)ulong.Parse(showDetails[0]),
                     Title = showDetails[1],
@@ -188,12 +215,12 @@ namespace MovieSearch.MediaSelection
             string file3 = "videos.csv";
             StreamReader sr3 = new StreamReader(file3);
             sr3.ReadLine();
-            Videos = new List<Video>();
+           // Libaries = new List<MediaLibary>();
             while (!sr3.EndOfStream)
             {
                 string line = sr3.ReadLine();
                 string[] videoDetails = line.Split(',');
-                Videos.Add(new Video()
+                Libaries.Add(new Video()
                 {
                     Id = (int)ulong.Parse(videoDetails[0]),
                     Title = videoDetails[1],
