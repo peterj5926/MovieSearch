@@ -32,13 +32,13 @@ namespace MovieSearch.MediaSelection
             do
             {
                 Console.WriteLine();
-                Console.WriteLine("Available Media for Display");
+                Console.WriteLine("Available Media Menu Options");
                 Console.WriteLine("1. Search for a Media Title");
                 Console.WriteLine("2. Display all Movies");
                 Console.WriteLine("3. Display all Shows");
                 Console.WriteLine("4. Display all Videos");
                 Console.WriteLine("5. Exit");
-                choice = Input.GetIntWithPrompt("Please select a number to view: ", "That is not a number, Please try again");
+                choice = Input.GetIntWithPrompt("Please select a Menu option: ", "That is not a number, Please try again");
                 if (choice > 5 || choice < 1)
                 {
                     Console.WriteLine();
@@ -53,35 +53,58 @@ namespace MovieSearch.MediaSelection
                     List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
                     var mediaGroup = results.GroupBy(s => s.GetType().Name);
 
-                    var mc = from c in results
+                    var groupCount = from c in results
                              group c by c.GetType().Name into g
                              select new {Reference = g.Key, Total = g.Count() };
-                    foreach (var g in mc)
-                        Console.WriteLine("There's {0} {1} reference that match your search", g.Total, g.Reference);
-                    
-                    
-                    var mediacount = new List<int>() {results.Count(), 
-                        results.Where(x => x.GetType().Name == "Movie").Count(),
-                        results.Where(x => x.GetType().Name == "Show").Count(),
-                        results.Where(x => x.GetType().Name == "Video").Count()};
-                    
-                    Console.WriteLine();
-                   
-                    Console.WriteLine($"There's {mediacount[0]} references that match your selection.");
-                    if (mediacount[0] > 0)
-                    {
-                       
-                        Console.WriteLine($"There are {mediacount[1]} Movies, {mediacount[2]} Shows, and {mediacount[3]} Videos that match your search. ");
-                        int displayType = Input.GetIntWithPrompt("Press 1 for the Titles or 2 to display their full details: ", "Please try again:");
-                        do
-                        {
-                            if (displayType > 2 || displayType < 1)
-                            {
-                                Console.WriteLine("Please press 1 for a list of Titles or 2 to display the full details of your media title search");
-                                displayType = Input.GetIntWithPrompt("How would you like you results displayed?", "Please try again.");
-                            }
-                        }while (displayType > 2 || displayType < 1);
+                    int displayType = 0;
+                    //var mediacount = new List<int>() {results.Count(), 
+                    //    results.Where(x => x.GetType().Name == "Movie").Count(),
+                    //    results.Where(x => x.GetType().Name == "Show").Count(),
+                    //    results.Where(x => x.GetType().Name == "Video").Count()};
 
+                    if (mediaGroup.Count() != 1 )
+                    {
+                        Console.WriteLine($"There are {results.Count()} references that match your selection.");
+                    }
+                   
+                    Console.WriteLine();
+                    if (mediaGroup.Count() > 0)
+                    {
+                        foreach (var g in groupCount)
+                            if (g.Total == 1)
+                            {
+                                Console.WriteLine("There is {0} {1} reference that match your search", g.Total, g.Reference);
+                            }
+                            else
+                            {
+                                Console.WriteLine("There are {0} {1} references that match your search", g.Total, g.Reference);
+                            }
+                        Console.WriteLine();
+                        // Console.WriteLine($"There are {mediacount[1]} Movies, {mediacount[2]} Shows, and {mediacount[3]} Videos that match your search. ");
+                        if (mediaGroup.Count() == 1)
+                        {
+                            displayType = Input.GetIntWithPrompt("Press 1 for the Title info or 2 to display it's full details: ", "Please try again:");
+                            do
+                            {
+                                if (displayType > 2 || displayType < 1)
+                                {
+                                    Console.WriteLine("Please press 1 for a list of Title or 2 to display it's full details of your media title search");
+                                    displayType = Input.GetIntWithPrompt("How would you like you results displayed?", "Please try again.");
+                                }
+                            } while (displayType > 2 || displayType < 1);
+                        }
+                        else
+                        {
+                            displayType = Input.GetIntWithPrompt("Press 1 for the Titles or 2 to display their full details: ", "Please try again:");
+                            do
+                            {
+                                if (displayType > 2 || displayType < 1)
+                                {
+                                    Console.WriteLine("Please press 1 for a list of Titles or 2 to display the full details of your media title search");
+                                    displayType = Input.GetIntWithPrompt("How would you like you results displayed?", "Please try again.");
+                                }
+                            } while (displayType > 2 || displayType < 1);
+                        }
                         if (displayType == 1)
                         {
                             
