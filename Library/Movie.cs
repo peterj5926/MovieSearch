@@ -17,7 +17,7 @@ namespace MovieSearch.Library
             Console.WriteLine($"Movie ID: {Id}");
             Console.WriteLine($"Title:    {Title}");
             Console.WriteLine($"Genres:   {string.Join(",", Genres)}");
-            Console.WriteLine();
+            
 
         }
 

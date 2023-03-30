@@ -21,7 +21,7 @@ namespace MovieSearch.Library
             Console.WriteLine($"Season:  {Season}");
             Console.WriteLine($"Episode: {Episode}");
             Console.WriteLine($"Writer:  {string.Join(",", Writers)}");
-            Console.WriteLine();
+            
         }
 
        

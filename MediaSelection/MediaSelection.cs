@@ -51,30 +51,70 @@ namespace MovieSearch.MediaSelection
                     Console.WriteLine("What Title would you like to search?");
                     var titleSearch = Console.ReadLine();
                     List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    //List<Movie> movies = Movies.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
-                    //List<Show> shows = Shows.Where(x => x.Title.Contains(titleSearch,StringComparison.OrdinalIgnoreCase)).ToList();
-                    //List<Video> videos = Videos.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    //List<MediaLibary> results = new List<MediaLibary>();
-                    //List<MediaLibary> results
-                    //results.AddRange(movies);
-                    //results.AddRange(shows);
-                    //results.AddRange(videos);
-
-                    var count = results.Count();
-                    var mcount = results.Where(x => x.GetType().Name == "Movie").Count();
+                    var mediaGroup = results.GroupBy(s => s.GetType().Name);
+                    
+                   
+                    
+                    
+                    var mediacount = new List<int>() {results.Count(), 
+                        results.Where(x => x.GetType().Name == "Movie").Count(),
+                        results.Where(x => x.GetType().Name == "Show").Count(),
+                        results.Where(x => x.GetType().Name == "Video").Count()};
+                    
                     Console.WriteLine();
-                    Console.WriteLine($"there are {mcount} Movies ");
-                    Console.WriteLine($"There are {count} references that match your selection.");
-
-                    Console.WriteLine();
-                    foreach (var media in results)
+                   
+                    Console.WriteLine($"There are {mediacount[0]} references that match your selection.");
+                    if (mediacount[0] > 0)
                     {
-                         
-                        Console.WriteLine($"Your {media.GetType().Name}: {media.Title} ");
-                        media.Display();
+                       
+                        Console.WriteLine($"There are {mediacount[1]} Movies, {mediacount[2]} Shows, and {mediacount[3]} Videos that match your search. ");
+                        int displayType = Input.GetIntWithPrompt("Press 1 for the Titles or 2 to display their full details: ", "Please try again:");
+                        do
+                        {
+                            if (displayType > 2 || displayType < 1)
+                            {
+                                Console.WriteLine("Please press 1 for a list of Titles or 2 to display the full details of your media title search");
+                                displayType = Input.GetIntWithPrompt("How would you like you results displayed?", "Please try again.");
+                            }
+                        }while (displayType > 2 || displayType < 1);
+
+                        if (displayType == 1)
+                        {
+                            
+                            foreach (var mgroup in mediaGroup)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine("Media Reference: {0}", mgroup.Key);
+
+                                foreach (MediaLibary s in mgroup)
+                                    Console.WriteLine("      {0}", s.Title);
+                            }
+                            //foreach (var media in results)
+                            //{
+                            //    Console.WriteLine($"{media.GetType().Name} Reference: {media.Title} ");
+                                
+                            //}
+                        }
+                        else if (displayType == 2)
+                        {
+                            
+                            foreach (var mgroup in mediaGroup)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine("Media Reference: {0}", mgroup.Key);
+
+                                foreach (MediaLibary s in mgroup)
+                                    s.Display();
+                            }
+                            //foreach (var media in results)
+                            //{
+                            //    Console.WriteLine($"{media.GetType().Name} Reference: ");
+                            //    media.Display();
+                            //}
+                        }
                     }
+
+                   
                 }
                 else if (choice == 2)
                 {
@@ -238,3 +278,20 @@ namespace MovieSearch.MediaSelection
 
 }
 
+//List<Movie> movies = Movies.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+//List<Show> shows = Shows.Where(x => x.Title.Contains(titleSearch,StringComparison.OrdinalIgnoreCase)).ToList();
+//List<Video> videos = Videos.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+
+//List<MediaLibary> results = new List<MediaLibary>();
+//List<MediaLibary> results
+//results.AddRange(movies);
+//results.AddRange(shows);
+//results.AddRange(videos);
+
+//var count = results.Count();
+//var mcount = results.Where(x => x.GetType().Name == "Movie").Count();
+//var scount = results.Where(x => x.GetType().Name == "Show").Count();
+//var vcount = results.Where(x => x.GetType().Name == "Video").Count();
+//Console.WriteLine($"There are {count} references that match your selection.");
+//Console.WriteLine($"There are {mcount} Movies, {scount} Shows, and {vcount} Videos that match your search. ");
+//var mc = results.GroupBy(c => c.GetType().Name).Count();

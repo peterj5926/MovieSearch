@@ -21,7 +21,7 @@ namespace MovieSearch.Library
             Console.WriteLine($"Format:   {Format}");
             Console.WriteLine($"Length:   {Length}");
             Console.WriteLine($"Format:   {string.Join(",", Regions)}");
-            Console.WriteLine();
+            
         }
 
         
