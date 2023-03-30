@@ -52,8 +52,12 @@ namespace MovieSearch.MediaSelection
                     var titleSearch = Console.ReadLine();
                     List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
                     var mediaGroup = results.GroupBy(s => s.GetType().Name);
-                    
-                   
+
+                    var mc = from c in results
+                             group c by c.GetType().Name into g
+                             select new {Reference = g.Key, Total = g.Count() };
+                    foreach (var g in mc)
+                        Console.WriteLine("There's {0} {1} reference that match your search", g.Total, g.Reference);
                     
                     
                     var mediacount = new List<int>() {results.Count(), 
@@ -63,7 +67,7 @@ namespace MovieSearch.MediaSelection
                     
                     Console.WriteLine();
                    
-                    Console.WriteLine($"There are {mediacount[0]} references that match your selection.");
+                    Console.WriteLine($"There's {mediacount[0]} references that match your selection.");
                     if (mediacount[0] > 0)
                     {
                        
