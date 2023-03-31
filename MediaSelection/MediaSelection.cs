@@ -32,7 +32,7 @@ namespace MovieSearch.MediaSelection
             do
             {
                 Console.WriteLine();
-                Console.WriteLine("Available Media Menu Options");
+                Console.WriteLine("*** Media Menu Options ***");
                 Console.WriteLine("1. Search for a Media Title");
                 Console.WriteLine("2. Display all Movies");
                 Console.WriteLine("3. Display all Shows");
@@ -42,23 +42,23 @@ namespace MovieSearch.MediaSelection
                 if (choice > 5 || choice < 1)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("I'm sorry, that is not a Menu option!");
-                }
-                else if (choice == 1)
-                {
-                    loadMedia();
-                    Console.WriteLine();
-                    Console.WriteLine("What Title would you like to search?");
-                    var titleSearch = Console.ReadLine();
-                    List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
-                    var mediaGroup = results.GroupBy(s => s.GetType().Name);
-
-                    var groupCount = from c in results
-                             group c by c.GetType().Name into g
-                             select new {Reference = g.Key, Total = g.Count() };
-                    int displayType = 0;
-                    //var mediacount = new List<int>() {results.Count(), 
-                    //    results.Where(x => x.GetType().Name == "Movie").Count(),
+                    Console.WriteLine("I'm sorry, that is not a Menu option!");                                                                 //We had just started abstract classes when I did this the first time so it was
+                }                                                                                                                               // set up to load each class individually for display because we had talked about
+                else if (choice == 1)                                                                                                           // not wasting memory on things that weren't needed. But to search all types of media
+                {                                                                                                                               // I needed to load them all so I created a new method using the base class to access the
+                    loadMedia();                                                                                                                // derived classes to only have one search across all media types. I saw you do this in
+                    Console.WriteLine();                                                                                                        // a class example and wanted to try it. The example from the last class had three searches
+                    Console.WriteLine("What Title would you like to search?");                                                                  // that then were added to a new list of the base media class. This skips that step and has
+                    var titleSearch = Console.ReadLine();                                                                                       // one search for all media per the assignment instructions or note listed at the end.
+                    List<MediaLibary> results = Libaries.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();// I know you said it didn't matter how we loaded it but I wanted to try something new. 
+                    var mediaGroup = results.GroupBy(s => s.GetType().Name);                                                                    // You said to play around with the Linq so now that I could search all of the media at once   
+                                                                                                                                                // I wanted to group the result together so I could count the number of results and the number 
+                    var groupCount = from c in results                                                                                          // of results in each group. The mediaCount worked but say we added DVD's, I would have to 
+                             group c by c.GetType().Name into g                                                                                 // change multiple lines of code to get the count and display the results. The groupCount 
+                             select new {Reference = g.Key, Total = g.Count() };                                                                // I found would auto generate and incorporate whatever GetTypes it found which was cool.
+                    int displayType = 0;                                                                                                        // A lot of 'if' statements were added because the grammer of the output was bugging me,
+                    //var mediacount = new List<int>() {results.Count(),                                                                        // is and are's, singular and plurals, didn't match the results. Using a much smarter way  
+                    //    results.Where(x => x.GetType().Name == "Movie").Count(),                                                              // to code was cool but the output sounded weird for the end user to read, lol.
                     //    results.Where(x => x.GetType().Name == "Show").Count(),
                     //    results.Where(x => x.GetType().Name == "Video").Count()};
 
@@ -80,9 +80,9 @@ namespace MovieSearch.MediaSelection
                                 Console.WriteLine("There are {0} {1} references that match your search", g.Total, g.Reference);
                             }
                         Console.WriteLine();
-                        // Console.WriteLine($"There are {mediacount[1]} Movies, {mediacount[2]} Shows, and {mediacount[3]} Videos that match your search. ");
-                        if (mediaGroup.Count() == 1)
-                        {
+                        // Console.WriteLine($"There are {mediacount[1]} Movies, {mediacount[2]} Shows, and {mediacount[3]} Videos that match your search. ");  // This used the mediacount and would just be another line of code to update if
+                        if (mediaGroup.Count() == 1)                                                                                                            // a new type of media was added or what if one was taken away. And it gave counts
+                        {                                                                                                                                       // for results with no matches
                             displayType = Input.GetIntWithPrompt("Press 1 for the Title info or 2 to display it's full details: ", "Please try again:");
                             do
                             {
@@ -109,8 +109,8 @@ namespace MovieSearch.MediaSelection
                         {
                             
                             foreach (var mgroup in mediaGroup)
-                            {
-                                Console.WriteLine();
+                            {                                                                                               // I found this that uses the results grouping to display the results. 
+                                Console.WriteLine();                                                                        // I wanted there to be options for the user on how the results were returned.
                                 Console.WriteLine("Media Reference: {0}", mgroup.Key);
 
                                 foreach (MediaLibary s in mgroup)
@@ -127,8 +127,8 @@ namespace MovieSearch.MediaSelection
                             
                             foreach (var mgroup in mediaGroup)
                             {
-                                Console.WriteLine();
-                                Console.WriteLine("Media Reference: {0}", mgroup.Key);
+                                Console.WriteLine();                                                                        // I liked using the abstract methods through the base class for displaying  
+                                Console.WriteLine("Media Reference: {0}", mgroup.Key);                                      // each classes display method with the grouping.
 
                                 foreach (MediaLibary s in mgroup)
                                     s.Display();
@@ -263,7 +263,7 @@ namespace MovieSearch.MediaSelection
             string file2 = "shows.csv";
             StreamReader sr2 = new StreamReader(file2);
             sr2.ReadLine();
-           // Libaries = new List<MediaLibary>();
+           
             while (!sr2.EndOfStream)
             {
                 string line = sr2.ReadLine();
@@ -282,7 +282,7 @@ namespace MovieSearch.MediaSelection
             string file3 = "videos.csv";
             StreamReader sr3 = new StreamReader(file3);
             sr3.ReadLine();
-           // Libaries = new List<MediaLibary>();
+           
             while (!sr3.EndOfStream)
             {
                 string line = sr3.ReadLine();
@@ -305,6 +305,7 @@ namespace MovieSearch.MediaSelection
 
 }
 
+//Trash Can
 //List<Movie> movies = Movies.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
 //List<Show> shows = Shows.Where(x => x.Title.Contains(titleSearch,StringComparison.OrdinalIgnoreCase)).ToList();
 //List<Video> videos = Videos.Where(x => x.Title.Contains(titleSearch, StringComparison.OrdinalIgnoreCase)).ToList();
